@@ -29,7 +29,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
   const refresh = useCallback(async () => {
     try {
-      const result = await api<{ user: User }>("/api/auth/me");
+      const result = await api<{ user: User | null }>("/api/auth/me");
       setUser(result.user);
     } catch {
       setUser(null);
