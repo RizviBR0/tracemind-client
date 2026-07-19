@@ -1,26 +1,164 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #172033;
+  --muted: #64748b;
+  --line: #dbe3ed;
+  --paper: #f7f8fb;
+  --purple: #6956e8;
+  --teal: #0f9f91;
+  --amber: #f59e0b;
+  --section-space: clamp(4.5rem, 7vw, 6rem);
+  --page-space: clamp(3rem, 6vw, 5rem);
+  --content-gap: clamp(3rem, 5vw, 4.5rem);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
+}
+a { color: inherit; text-decoration: none; }
+button, input, textarea, select { font: inherit; }
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #a69af3;
+  outline-offset: 2px;
+}
+
+.shell {
+  width: 100%;
+  max-width: 1220px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(15, 23, 42, 0.045);
+}
+
+/* Page-level rhythm for every non-landing route. */
+main > .shell {
+  padding-top: var(--page-space);
+  padding-bottom: var(--page-space);
+}
+
+/* Workspaces favor a denser, application-like viewport over document spacing. */
+main > .shell.workspace-shell {
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+/* Every landing section gets the same vertical breathing room and divider. */
+main > section:not(:first-child) {
+  padding-top: var(--section-space);
+  padding-bottom: var(--section-space);
+  border-top: 1px solid var(--line);
+}
+
+/* Full-width sections already use an inner shell; keep spacing on the section. */
+main > section:not(:first-child) > .shell {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Separate substantial content groups inside regular pages. */
+main > .shell > section {
+  margin-top: var(--content-gap);
+  padding-top: var(--content-gap);
+  border-top: 1px solid var(--line);
+}
+
+body > footer { margin-top: 0 !important; }
+section[id] { scroll-margin-top: 5rem; }
+
+/* Stable fallbacks for custom spacing values used by the components. */
+.shell.py-18 { padding-top: var(--section-space); padding-bottom: var(--section-space); }
+.min-h-15 { min-height: 3.75rem; }
+.min-h-95 { min-height: 23.75rem; }
+.min-h-130 { min-height: 32.5rem; }
+.h-65 { height: 16.25rem; }
+.h-75 { height: 18.75rem; }
+.w-35 { width: 8.75rem; }
+.w-38 { width: 9.5rem; }
+
+.eyebrow {
+  color: var(--teal);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 42px;
+  padding: 0.65rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--purple); color: white; }
+.btn-primary:hover { background: #5643d3; }
+.btn-secondary { background: white; color: var(--ink); border-color: var(--line); }
+.btn-teal { background: var(--teal); color: white; }
+.prose p { color: var(--muted); line-height: 1.7; }
+
+.Toastify__toast {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.14);
+  color: var(--ink);
+  font-family: var(--font-poppins), Poppins, sans-serif;
+  font-size: 0.875rem;
+}
+.Toastify__toast--error { background: #fff7f7; }
+.Toastify__toast--success { background: #f0fdfa; }
+.Toastify__progress-bar--error { background: #e11d48; }
+.Toastify__progress-bar--success { background: var(--teal); }
+
+@keyframes suggestion-marquee {
+  0%, 12% { transform: translateX(0); }
+  68%, 84% { transform: translateX(calc(-1 * var(--marquee-distance))); }
+  84.01%, 100% { transform: translateX(0); }
+}
+
+.suggestion-marquee-track {
+  display: inline-block;
+  min-width: max-content;
+  animation: suggestion-marquee var(--marquee-duration, 20s) linear infinite;
+  will-change: transform;
+}
+
+.suggestion-chip:hover .suggestion-marquee-track,
+.suggestion-chip:focus-visible .suggestion-marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .suggestion-marquee-track { animation: none; }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --section-space: 3.5rem;
+    --page-space: 2.5rem;
+    --content-gap: 2.75rem;
+  }
+  .shell { padding-inline: 16px; }
 }

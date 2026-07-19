@@ -1,65 +1,9 @@
-import Image from "next/image";
-
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
-}
+import Link from "next/link"; import { ArrowRight, CheckCircle2, FileSearch, Network, ShieldCheck, Sparkles } from "lucide-react"; import { FeaturedCases, LandingStats } from "@/components/landing-live-data"; import { DecisionFlowDiagram } from "@/components/decision-flow-diagram";
+export default function Home(){return <><section className="overflow-hidden border-b border-slate-200 bg-white"><div className="shell grid min-h-[65svh] items-center gap-10 py-14 lg:grid-cols-[1.05fr_.95fr]"><div><p className="eyebrow">Decision intelligence, grounded in your context</p><h1 className="mt-4 max-w-2xl text-4xl font-extrabold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">Turn scattered information into confident decisions.</h1><p className="mt-5 max-w-xl text-lg leading-8 text-slate-600">TraceMind connects your notes, documents and project context, identifies risks and helps you choose the strongest next step.</p><div className="mt-8 flex flex-wrap gap-3"><Link href="/items/add" className="btn btn-primary">Start a decision <ArrowRight size={17}/></Link><Link href="/explore" className="btn btn-secondary">Explore public cases</Link></div><p className="mt-5 text-sm text-slate-500">Start with a focused problem. Keep the reasoning attached to the work.</p></div><DecisionFlowDiagram /></div></section>
+<section className="shell py-18"><p className="eyebrow text-center">A deliberate workflow</p><h2 className="mt-3 text-center text-3xl font-extrabold">From a question to an accountable next step.</h2><div className="mt-10 grid gap-5 md:grid-cols-3">{[[FileSearch,'Bring the evidence','Capture the problem, constraints, sources and the outcome that matters.'],[Network,'Make connections','TraceMind finds related context, gaps and contradictions across your case.'],[CheckCircle2,'Commit with clarity','Compare options, save a recommendation and turn it into visible action items.']].map(([Icon,title,copy])=><div className="card p-6" key={String(title)}><Icon size={24} className="text-[#6956e8]"/><h3 className="mt-5 font-bold">{String(title)}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{String(copy)}</p></div>)}</div></section>
+<section className="border-y border-slate-200 bg-white"><div className="shell grid gap-8 py-16 md:grid-cols-2"><div><p className="eyebrow">Decision intelligence agent</p><h2 className="mt-3 text-3xl font-extrabold">Reasoning you can inspect, not a black box.</h2><p className="mt-4 leading-7 text-slate-600">The agent uses your goals, constraints and relevant evidence to rank options, surface assumptions and propose a practical action plan.</p><Link href="/workspace" className="btn btn-secondary mt-6">Open the workspace <ArrowRight size={16}/></Link></div><div className="card p-6"><p className="text-sm font-bold">What the agent returns</p><div className="mt-4 grid gap-3">{['A weighted comparison of options','Risks and assumptions to validate','Focused follow-up questions','Action items with clear owners'].map(x=><p key={x} className="flex gap-2 text-sm text-slate-600"><CheckCircle2 size={17} className="shrink-0 text-[#0f9f91]"/>{x}</p>)}</div></div></div></section>
+<section className="shell py-18"><div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr]"><div><p className="eyebrow">Document intelligence</p><h2 className="mt-3 text-3xl font-extrabold">Useful documents become usable knowledge.</h2><p className="mt-4 text-slate-600">Upload research, briefs and reports. TraceMind extracts key points, risks, action items and editable tags while keeping each file attached to the right case.</p></div><div className="grid gap-4 sm:grid-cols-2">{[['PDF, DOCX & text','Structured summaries and searchable chunks'],['Images','Image-aware context and visual evidence'],['Risk signals','Potential conflicts and dates worth checking'],['PDF reports','Share a concise decision record']].map(([a,b])=><div className="card p-5" key={a}><FileSearch size={20} className="text-[#0f9f91]"/><h3 className="mt-3 font-bold">{a}</h3><p className="mt-1 text-sm text-slate-500">{b}</p></div>)}</div></div></section>
+<LandingStats/>
+<FeaturedCases/>
+<section className="border-y border-slate-200 bg-white"><div className="shell grid gap-8 py-16 md:grid-cols-2"><div><p className="eyebrow">Privacy by design</p><h2 className="mt-3 text-3xl font-extrabold">Your private reasoning stays private.</h2><p className="mt-4 leading-7 text-slate-600">Public case pages exclude confidential documents, notes and AI conversations. Control visibility at the case level, with ownership checks at the API.</p></div><div className="card p-6"><ShieldCheck size={25} className="text-[#0f9f91]"/><p className="mt-4 font-bold">Built-in safeguards</p><ul className="mt-3 space-y-3 text-sm text-slate-600"><li>• Case owner authorization</li><li>• Protected document access</li><li>• Controlled AI context retrieval</li></ul></div></div></section>
+<section className="shell py-18"><p className="eyebrow">Questions, answered</p><h2 className="mt-3 text-3xl font-extrabold">A practical home for consequential work.</h2><div className="mt-8 grid gap-4 md:grid-cols-3">{[['Who is TraceMind for?','Individuals and teams working through decisions where sources, trade-offs and follow-through matter.'],['Can I keep a case private?','Yes. Private cases, files and conversations are never shown in public exploration.'],['How does AI use my content?','The agent receives only context retrieved for your active case and never runs unvalidated actions.']].map(([q,a])=><article className="card p-5" key={q}><h3 className="font-bold">{q}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{a}</p></article>)}</div><div className="card mt-10 flex flex-col items-start justify-between gap-5 bg-violet-50 p-7 md:flex-row md:items-center"><div><p className="font-bold text-slate-900">Ready to make your next decision traceable?</p><p className="mt-1 text-sm text-slate-600">Start with the problem, then let the evidence lead.</p></div><Link href="/register" className="btn btn-primary">Create your account <Sparkles size={16}/></Link></div></section></>}
