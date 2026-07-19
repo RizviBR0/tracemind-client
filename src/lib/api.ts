@@ -1,8 +1,8 @@
 export type User = { id: string; name: string; email: string; role: "user" | "admin" };
 
-const serverUrl = (process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000").replace(/\/$/, "");
-export const apiUrl = (process.env.NEXT_PUBLIC_API_URL || `${serverUrl}/api/v1`).replace(/\/$/, "");
-export const googleLoginUrl = `${serverUrl}/api/auth/google`;
+const apiProxyUrl = "/api/backend";
+export const apiUrl = `${apiProxyUrl}/api/v1`;
+export const googleLoginUrl = `${apiProxyUrl}/api/auth/google`;
 
 export class ApiError extends Error {
   constructor(message: string, public status: number, public issues?: unknown) {
@@ -13,7 +13,7 @@ export class ApiError extends Error {
 export async function api<T>(path: string, options: RequestInit = {}): Promise<T> {
   const headers = new Headers(options.headers);
   if (options.body && !(options.body instanceof FormData)) headers.set("Content-Type", "application/json");
-  const response = await fetch(`${serverUrl}${path}`, {
+  const response = await fetch(`${apiProxyUrl}${path}`, {
     ...options,
     headers,
     credentials: "include",
