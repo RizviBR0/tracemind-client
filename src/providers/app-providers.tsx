@@ -1,6 +1,7 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { usePathname, useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,8 +20,12 @@ type AuthContextValue = {
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
+const protectedPrefixes = ["/workspace", "/items/add", "/items/manage", "/dashboard", "/profile", "/admin"];
+const authPaths = new Set(["/login", "/register"]);
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const router = useRouter();
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: { queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: false } },
   }));
@@ -41,6 +46,15 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
   useEffect(() => { void refresh(); }, [refresh]);
 
+  const protectedPath = protectedPrefixes.some(prefix => pathname === prefix || pathname.startsWith(`${prefix}/`));
+  const authPath = authPaths.has(pathname);
+
+  useEffect(() => {
+    if (loading) return;
+    if (!user && protectedPath) router.replace(`/login?next=${encodeURIComponent(pathname)}`);
+    if (user && authPath) router.replace("/workspace");
+  }, [authPath, loading, pathname, protectedPath, router, user]);
+
   const login = useCallback(async (input: Credentials) => {
     const result = await api<{ user: User }>("/api/auth/login", { method: "POST", body: JSON.stringify(input) });
     setUser(result.user);
@@ -60,7 +74,11 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
   }, [queryClient]);
 
   const value = useMemo(() => ({ user, loading, login, register, logout, refresh, loginWithGoogle: () => { window.location.href = googleLoginUrl; } }), [user, loading, login, register, logout, refresh]);
-  return <QueryClientProvider client={queryClient}><AuthContext.Provider value={value}>{children}<ToastContainer position="bottom-right" autoClose={5000} limit={3} newestOnTop closeOnClick pauseOnFocusLoss pauseOnHover theme="light"/></AuthContext.Provider></QueryClientProvider>;
+  const checkingOrRedirecting = (loading && (protectedPath || authPath)) || (!loading && ((!user && protectedPath) || (user && authPath)));
+  const content = checkingOrRedirecting
+    ? <div className="shell grid min-h-[calc(100svh-64px)] place-items-center py-10"><p className="text-sm font-semibold text-slate-500">Checking your session…</p></div>
+    : children;
+  return <QueryClientProvider client={queryClient}><AuthContext.Provider value={value}>{content}<ToastContainer position="bottom-right" autoClose={5000} limit={3} newestOnTop closeOnClick pauseOnFocusLoss pauseOnHover theme="light"/></AuthContext.Provider></QueryClientProvider>;
 }
 
 export function useAuth() {
