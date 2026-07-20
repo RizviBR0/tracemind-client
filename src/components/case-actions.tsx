@@ -3,12 +3,14 @@
 import { useRouter } from "next/navigation";
 import { Flag, Heart, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { api, ApiError } from "@/lib/api";
 import { useAuth } from "@/providers/app-providers";
 
 export function CaseActions({ slug, title }: { slug: string; title: string }) {
   const router = useRouter();
   const { user } = useAuth();
+  const client = useQueryClient();
   const [saved, setSaved] = useState(false);
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
@@ -26,7 +28,7 @@ export function CaseActions({ slug, title }: { slug: string; title: string }) {
   async function toggleSave() {
     if (!requireUser()) return;
     setBusy(true); setNotice("");
-    try { const result = await api<{ saved: boolean }>(`/api/v1/cases/${slug}/save`, { method: "POST" }); setSaved(result.saved); setNotice(result.saved ? "Case saved." : "Case removed from saved items."); }
+    try { const result = await api<{ saved: boolean }>(`/api/v1/cases/${slug}/save`, { method: "POST" }); setSaved(result.saved); setNotice(result.saved ? "Case saved." : "Case removed from saved items."); client.invalidateQueries({ queryKey: ["saved-cases"] }); }
     catch (error) { setNotice(error instanceof ApiError ? error.message : "Unable to save this case."); }
     finally { setBusy(false); }
   }
