@@ -6,6 +6,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { api, googleLoginUrl, type User } from "@/lib/api";
+import TetrisLoading from "@/components/ui/tetris-loader";
 
 type Credentials = { email: string; password: string };
 type RegisterInput = Credentials & { name: string };
@@ -76,7 +77,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
   const value = useMemo(() => ({ user, loading, login, register, logout, refresh, loginWithGoogle: () => { window.location.href = googleLoginUrl; } }), [user, loading, login, register, logout, refresh]);
   const checkingOrRedirecting = (loading && (protectedPath || authPath)) || (!loading && ((!user && protectedPath) || (user && authPath)));
   const content = checkingOrRedirecting
-    ? <div className="shell grid min-h-[calc(100svh-64px)] place-items-center py-10"><p className="text-sm font-semibold text-slate-500">Checking your session…</p></div>
+    ? <div className="shell grid min-h-[calc(100svh-64px)] place-items-center py-10"><TetrisLoading size="md" speed="normal" loadingText="Checking your session..." /></div>
     : children;
   return <QueryClientProvider client={queryClient}><AuthContext.Provider value={value}>{content}<ToastContainer position="bottom-right" autoClose={5000} limit={3} newestOnTop closeOnClick pauseOnFocusLoss pauseOnHover theme="light"/></AuthContext.Provider></QueryClientProvider>;
 }
