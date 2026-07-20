@@ -54,6 +54,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </button>
             {accountOpen && <div className="card absolute right-0 top-12 w-52 p-2 shadow-lg">
               <Link onClick={() => setAccountOpen(false)} href="/profile" className="block rounded-md px-3 py-2 text-sm font-semibold hover:bg-slate-50">Profile</Link>
+              <Link onClick={() => setAccountOpen(false)} href="/profile/saved" className="block rounded-md px-3 py-2 text-sm font-semibold hover:bg-slate-50">Saved cases</Link>
               {user.role === "admin" && <Link onClick={() => setAccountOpen(false)} href="/admin" className="flex items-center justify-between rounded-md px-3 py-2 text-sm font-semibold hover:bg-slate-50">Administration {pendingCases > 0 && <span className="rounded-full bg-rose-500 px-2 py-0.5 text-xs text-white">{pendingCases}</span>}</Link>}
               <button onClick={signOut} className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-semibold text-rose-700 hover:bg-rose-50"><LogOut size={15}/> Log out</button>
             </div>}
@@ -66,7 +67,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </nav>
       {open && <div className="border-t border-slate-200 bg-white px-4 pb-4 lg:hidden">
         {links.map(([name, href]) => <Link onClick={() => setOpen(false)} className="block rounded-md px-3 py-3 text-sm font-semibold" key={href} href={href}>{name}</Link>)}
-        {user ? <><Link onClick={() => setOpen(false)} className="block rounded-md px-3 py-3 text-sm font-semibold" href="/profile">Profile</Link>{user.role === "admin" && <Link onClick={() => setOpen(false)} className="flex items-center justify-between rounded-md px-3 py-3 text-sm font-semibold" href="/admin">Administration {pendingCases > 0 && <span className="rounded-full bg-rose-500 px-2 py-0.5 text-xs text-white">{pendingCases}</span>}</Link>}<button onClick={signOut} className="block w-full rounded-md px-3 py-3 text-left text-sm font-semibold text-rose-700">Log out</button></> : <><Link href="/login" className="block px-3 py-3 font-semibold">Log in</Link><Link href="/register" className="block px-3 py-3 font-semibold text-[#6956e8]">Create account</Link></>}
+        {user ? <><Link onClick={() => setOpen(false)} className="block rounded-md px-3 py-3 text-sm font-semibold" href="/profile">Profile</Link><Link onClick={() => setOpen(false)} className="block rounded-md px-3 py-3 text-sm font-semibold" href="/profile/saved">Saved cases</Link>{user.role === "admin" && <Link onClick={() => setOpen(false)} className="flex items-center justify-between rounded-md px-3 py-3 text-sm font-semibold" href="/admin">Administration {pendingCases > 0 && <span className="rounded-full bg-rose-500 px-2 py-0.5 text-xs text-white">{pendingCases}</span>}</Link>}<button onClick={signOut} className="block w-full rounded-md px-3 py-3 text-left text-sm font-semibold text-rose-700">Log out</button></> : <><Link href="/login" className="block px-3 py-3 font-semibold">Log in</Link><Link href="/register" className="block px-3 py-3 font-semibold text-[#6956e8]">Create account</Link></>}
       </div>}
     </header>
     <main id="main-content">{children}</main>
