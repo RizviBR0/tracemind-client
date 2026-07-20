@@ -5,6 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { BrainCircuit, ChevronDown, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/providers/app-providers";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api";
 
 const publicLinks = [["Home", "/"], ["Explore", "/explore"], ["About", "/about"], ["Help", "/help"]];
 const signedLinks = [["Workspace", "/workspace"], ["Add case", "/items/add"], ["Manage cases", "/items/manage"], ["Dashboard", "/dashboard"]];
@@ -16,6 +18,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const links = [...publicLinks, ...(user ? signedLinks : [])];
+
+  const adminQuery = useQuery({
+    queryKey: ["admin-analytics"],
+    queryFn: () => api<{ pendingCases: number }>("/api/v1/analytics/admin"),
+    enabled: user?.role === "admin",
+  });
+  const pendingCases = adminQuery.data?.pendingCases || 0;
 
   async function signOut() {
     await logout();
@@ -37,12 +46,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="hidden items-center gap-2 sm:flex">
           {!loading && user ? <div className="relative">
             <button onClick={() => setAccountOpen(!accountOpen)} className="flex min-h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold hover:bg-slate-50" aria-expanded={accountOpen}>
-              <span className="grid h-7 w-7 place-items-center rounded-full bg-violet-100 text-xs text-[#6956e8]">{user.name.charAt(0).toUpperCase()}</span>
+              <span className="relative grid h-7 w-7 place-items-center rounded-full bg-violet-100 text-xs text-[#6956e8]">
+                {user.name.charAt(0).toUpperCase()}
+                {user.role === "admin" && pendingCases > 0 && <span className="absolute -right-1 -top-1 block h-3 w-3 rounded-full border-2 border-white bg-rose-500" aria-label="Notification"></span>}
+              </span>
               {user.name}<ChevronDown size={15}/>
             </button>
             {accountOpen && <div className="card absolute right-0 top-12 w-52 p-2 shadow-lg">
               <Link onClick={() => setAccountOpen(false)} href="/profile" className="block rounded-md px-3 py-2 text-sm font-semibold hover:bg-slate-50">Profile</Link>
-              {user.role === "admin" && <Link onClick={() => setAccountOpen(false)} href="/admin" className="block rounded-md px-3 py-2 text-sm font-semibold hover:bg-slate-50">Administration</Link>}
+              {user.role === "admin" && <Link onClick={() => setAccountOpen(false)} href="/admin" className="flex items-center justify-between rounded-md px-3 py-2 text-sm font-semibold hover:bg-slate-50">Administration {pendingCases > 0 && <span className="rounded-full bg-rose-500 px-2 py-0.5 text-xs text-white">{pendingCases}</span>}</Link>}
               <button onClick={signOut} className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-semibold text-rose-700 hover:bg-rose-50"><LogOut size={15}/> Log out</button>
             </div>}
           </div> : !loading && <>
@@ -54,7 +66,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </nav>
       {open && <div className="border-t border-slate-200 bg-white px-4 pb-4 lg:hidden">
         {links.map(([name, href]) => <Link onClick={() => setOpen(false)} className="block rounded-md px-3 py-3 text-sm font-semibold" key={href} href={href}>{name}</Link>)}
-        {user ? <><Link onClick={() => setOpen(false)} className="block rounded-md px-3 py-3 text-sm font-semibold" href="/profile">Profile</Link><button onClick={signOut} className="block w-full rounded-md px-3 py-3 text-left text-sm font-semibold text-rose-700">Log out</button></> : <><Link href="/login" className="block px-3 py-3 font-semibold">Log in</Link><Link href="/register" className="block px-3 py-3 font-semibold text-[#6956e8]">Create account</Link></>}
+        {user ? <><Link onClick={() => setOpen(false)} className="block rounded-md px-3 py-3 text-sm font-semibold" href="/profile">Profile</Link>{user.role === "admin" && <Link onClick={() => setOpen(false)} className="flex items-center justify-between rounded-md px-3 py-3 text-sm font-semibold" href="/admin">Administration {pendingCases > 0 && <span className="rounded-full bg-rose-500 px-2 py-0.5 text-xs text-white">{pendingCases}</span>}</Link>}<button onClick={signOut} className="block w-full rounded-md px-3 py-3 text-left text-sm font-semibold text-rose-700">Log out</button></> : <><Link href="/login" className="block px-3 py-3 font-semibold">Log in</Link><Link href="/register" className="block px-3 py-3 font-semibold text-[#6956e8]">Create account</Link></>}
       </div>}
     </header>
     <main id="main-content">{children}</main>
