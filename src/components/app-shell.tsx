@@ -57,7 +57,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {user ? <><Link onClick={() => setOpen(false)} className="block rounded-md px-3 py-3 text-sm font-semibold" href="/profile">Profile</Link><button onClick={signOut} className="block w-full rounded-md px-3 py-3 text-left text-sm font-semibold text-rose-700">Log out</button></> : <><Link href="/login" className="block px-3 py-3 font-semibold">Log in</Link><Link href="/register" className="block px-3 py-3 font-semibold text-[#6956e8]">Create account</Link></>}
       </div>}
     </header>
-    <main>{children}</main>
+    <main id="main-content">{children}</main>
     <Footer/>
   </>;
 }
@@ -66,8 +66,8 @@ function Footer() {
   return <footer className="mt-20 border-t border-slate-200 bg-white">
     <div className="shell grid gap-10 py-12 md:grid-cols-[2fr_1fr_1fr]">
       <div><p className="flex items-center gap-2 font-extrabold"><BrainCircuit size={19} className="text-[#6956e8]"/> TraceMind</p><p className="mt-3 max-w-sm text-sm leading-6 text-slate-500">Decision intelligence for teams that need to turn evidence into a confident next step.</p><a className="mt-3 inline-block text-sm text-slate-600 hover:text-[#6956e8]" href="mailto:hello@tracemind.app">hello@tracemind.app</a></div>
-      <div><p className="font-bold">Explore</p><div className="mt-3 grid gap-2 text-sm text-slate-500"><Link href="/explore">Public cases</Link><Link href="/about">About TraceMind</Link><Link href="/help">Help centre</Link></div></div>
-      <div><p className="font-bold">Trust</p><div className="mt-3 grid gap-2 text-sm text-slate-500"><Link href="/privacy">Privacy</Link><a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a><a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a></div></div>
+      <nav aria-label="Explore links"><p className="font-bold">Explore</p><div className="mt-3 grid gap-2 text-sm text-slate-500"><Link href="/explore">Public cases</Link><Link href="/about">About TraceMind</Link><Link href="/help">Help centre</Link></div></nav>
+      <nav aria-label="Trust links"><p className="font-bold">Trust</p><div className="mt-3 grid gap-2 text-sm text-slate-500"><Link href="/privacy">Privacy</Link><a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a><a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a></div></nav>
     </div>
     <div className="border-t border-slate-100 py-5 text-center text-xs text-slate-500">© 2026 TraceMind. Built for thoughtful decisions.</div>
   </footer>;

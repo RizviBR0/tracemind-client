@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CalendarDays, Eye, Star } from "lucide-react";
@@ -15,6 +16,28 @@ async function getCase(slug: string): Promise<PublicCaseDetails | null> {
   if (response.status === 404) return null;
   if (!response.ok) throw new Error("Unable to load this case.");
   return response.json() as Promise<PublicCaseDetails>;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const data = await getCase(slug);
+  if (!data) return { title: "Case not found" };
+  const { item } = data;
+  return {
+    title: item.title,
+    description: item.shortDescription.slice(0, 160),
+    openGraph: {
+      title: item.title,
+      description: item.shortDescription.slice(0, 160),
+      type: "article",
+      ...(item.coverImage ? { images: [{ url: item.coverImage }] } : {}),
+    },
+    twitter: {
+      card: item.coverImage ? "summary_large_image" : "summary",
+      title: item.title,
+      description: item.shortDescription.slice(0, 160),
+    },
+  };
 }
 
 export default async function Details({ params }: { params: Promise<{ slug: string }> }) {
