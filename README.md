@@ -6,9 +6,8 @@ TraceMind is a decision-intelligence workspace that helps people connect case co
 
 - GitHub repository: [tracemind-client](https://github.com/RizviBR0/tracemind-client)
 - Backend repository: [tracemind-server](https://github.com/RizviBR0/tracemind-server)
-- Live application: deployment URL is not configured in this repository yet
+- Live application: [tracemind-client.vercel.app](https://tracemind-client.vercel.app/)
 
-> `https://tracemind.app` is not listed as the live URL because it currently serves a different product. Add the real deployment URL here after the frontend is deployed.
 
 ## Screenshot
 
