@@ -80,7 +80,7 @@ function Footer() {
     <div className="shell grid gap-10 py-12 md:grid-cols-[2fr_1fr_1fr]">
       <div><p className="flex items-center gap-2 font-extrabold"><BrainCircuit size={19} className="text-[#6956e8]"/> TraceMind</p><p className="mt-3 max-w-sm text-sm leading-6 text-slate-500">Decision intelligence for teams that need to turn evidence into a confident next step.</p><a className="mt-3 inline-block text-sm text-slate-600 hover:text-[#6956e8]" href="mailto:hello@tracemind.app">hello@tracemind.app</a></div>
       <nav aria-label="Explore links"><p className="font-bold">Explore</p><div className="mt-3 grid gap-2 text-sm text-slate-500"><Link href="/explore">Public cases</Link><Link href="/about">About TraceMind</Link><Link href="/help">Help centre</Link></div></nav>
-      <nav aria-label="Trust links"><p className="font-bold">Trust</p><div className="mt-3 grid gap-2 text-sm text-slate-500"><Link href="/privacy">Privacy</Link><a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a><a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a></div></nav>
+      <nav aria-label="Trust links"><p className="font-bold">Trust</p><div className="mt-3 grid gap-2 text-sm text-slate-500"><Link href="/privacy">Privacy</Link><a href="https://github.com/RizviBR0/tracemind-client" target="_blank" rel="noreferrer">Client source</a><a href="https://github.com/RizviBR0/tracemind-server" target="_blank" rel="noreferrer">Server source</a></div></nav>
     </div>
     <div className="border-t border-slate-100 py-5 text-center text-xs text-slate-500">© 2026 TraceMind. Built for thoughtful decisions.</div>
   </footer>;
